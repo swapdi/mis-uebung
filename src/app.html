@@ -35,23 +35,30 @@
       <header>
         <button class="mwf-imgbutton mwf-img-sandwich mwf-left-align"></button>
         <h1 class="mwf-left-align">Medienliste</h1>
-        <button class="mwf-imgbutton mwf-img-plus mwf-right-align"></button>
+        <button
+          id="myapp-addNewItem"
+          class="mwf-imgbutton mwf-img-plus mwf-right-align"
+        ></button>
         <button class="mwf-imgbutton mwf-img-delete mwf-right-align"></button>
       </header>
 
       <main class="mwf-scrollview">
-        <ul class="mwf-listview" data-mwf-listitem-view="myapp-listitem">
+        <ul
+          class="mwf-listview"
+          data-mwf-listitem-view="myapp-listitem"
+          data-mwf-listitem-menu="myapp-listitemMenu"
+        >
           <li
-            class="mwf-listitem mwf-li-title-subtitle mwf-template"
+            class="mwf-listitem mwf-li-title-subtitle mwf-template mwf-databind"
             data-mwf-templatename="myapp-listitem"
           >
-            <img alt="Bild des Medienelements" />
+            <img alt="Bild des Medienelements" src="{{src}}" />
             <div class="mwf-li-titleblock">
-              <h2></h2>
-              <h3></h3>
+              <h2>{{title}}</h2>
+              <h3>{{added}}</h3>
             </div>
             <button
-              class="mwf-imgbutton mwf-img-options-vertical mwf-right-align"
+              class="mwf-imgbutton mwf-img-options-vertical mwf-right-align mwf-listitem-menu-control"
             ></button>
           </li>
         </ul>
@@ -60,6 +67,31 @@
       <footer>
         <button class="mwf-imgbutton mwf-img-refresh mwf-right-align"></button>
       </footer>
+    </div>
+
+    <div
+      class="mwf-listitem-menu mwf-dialog mwf-popup mwf-template mwf-databind"
+      data-mwf-templatename="myapp-listitemMenu"
+    >
+      <header>
+        <h2 class="mwf-dyncontent">{{title}}</h2>
+      </header>
+      <main>
+        <ul>
+          <li
+            class="mwf-li-singletitle mwf-menu-item"
+            data-mwf-targetaction="deleteItem"
+          >
+            Löschen
+          </li>
+          <li
+            class="mwf-li-singletitle mwf-menu-item"
+            data-mwf-targetaction="editItem"
+          >
+            Bearbeiten
+          </li>
+        </ul>
+      </main>
     </div>
   </body>
 </html>
