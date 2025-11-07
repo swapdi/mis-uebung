@@ -1,7 +1,13 @@
 /**
  * Updated by master on 21.02.24.
  */
-import { EntityManager, GenericCRUDImplLocal, mwf } from "vfh-iam-mwf-base";
+import {
+  EntityManager,
+  GenericCRUDImplLocal,
+  GenericCRUDImplRemote,
+  mwf,
+} from "vfh-iam-mwf-base";
+import * as entities from "./model/MyEntities.js";
 
 class MyApplication extends mwf.Application {
   constructor() {
@@ -22,11 +28,20 @@ class MyApplication extends mwf.Application {
     console.log("MyApplication.oncreate(): local database initialised");
 
     //// TODO-REPEATED: if entity manager is used, register entities and crud operations for the entity types
-    //this.registerEntity("MyEntity", entities.MyEntity, true);
-    //this.registerCRUD("MyEntity", this.CRUDOPS.LOCAL, GenericCRUDImplLocal.newInstance("MyEntity"));
-    //this.registerCRUD("MyEntity", this.CRUDOPS.REMOTE, GenericCRUDImplRemote.newInstance("MyEntity"));
+    this.registerEntity("MediaItem", entities.MediaItem, true);
+    this.registerCRUD(
+      "MediaItem",
+      this.CRUDOPS.LOCAL,
+      GenericCRUDImplLocal.newInstance("MediaItem")
+    );
+    this.registerCRUD(
+      "MediaItem",
+      this.CRUDOPS.REMOTE,
+      GenericCRUDImplRemote.newInstance("MediaItem")
+    );
 
     // TODO: do any further application specific initialisations here
+    this.initialiseCRUD(this.CRUDOPS.LOCAL, EntityManager);
 
     // THIS MUST NOT BE FORGOTTEN: initialise the entity manager!
     EntityManager.initialise();

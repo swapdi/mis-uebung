@@ -1,7 +1,7 @@
 /**
  * @author Jörn Kreutel
  */
-import { GenericCRUDImplLocal, mwf } from "vfh-iam-mwf-base";
+import { mwf } from "vfh-iam-mwf-base";
 import * as entities from "../model/MyEntities.js";
 const imgs = [
   "https://picsum.photos/50/100",
@@ -29,13 +29,11 @@ export default class ListViewController extends mwf.ViewController {
 
     this.root.querySelector("#myapp-addNewItem").onclick = () => {
       const newItem = this.createRandomObject();
-      this.crudops.create(newItem).then((created) => {
-        this.addToListview(created);
-      });
+      newItem.create().then(() => this.addToListview(newItem));
     };
 
-    this.crudops.readAll().then((allItems) => {
-      this.initialiseListview(allItems);
+    entities.MediaItem.readAll().then((items) => {
+      this.initialiseListview(items);
     });
 
     // call the superclass once creation is done
@@ -44,8 +42,6 @@ export default class ListViewController extends mwf.ViewController {
 
   constructor() {
     super();
-
-    this.crudops = GenericCRUDImplLocal.newInstance("MediaItem");
 
     console.log("ListViewController()");
   }
@@ -56,41 +52,20 @@ export default class ListViewController extends mwf.ViewController {
    */
   async onReturnFromNextView(nextviewid, returnValue, returnStatus) {
     // TODO: check from which view, and possibly with which status, we are returning, and handle returnValue accordingly
+    if (returnStatus === "itemDeleted") {
+      this.removeFromListview(returnValue.item._id);
+    }
   }
-
-  /*
-   * for views with listviews: bind a list item to an item view
-   * TODO: delete if no listview is used or if databinding uses ractive templates
-   */
-  /* bindListItemView(listviewid, itemview, itemobj) {
-    // TODO: implement how attributes of itemobj shall be displayed in itemview
-    /* itemview.root.querySelector("img").src = itemobj.src;
-    itemview.root.querySelector("h2").textContent = itemobj.title;
-    itemview.root.querySelector("h3").textContent = itemobj.added;
-    super.bindListItemView(listviewid, itemview, itemobj);
-  } */
 
   /*
    * for views with listviews: react to the selection of a listitem
    * TODO: delete if no listview is used or if item selection is specified by targetview/targetaction
    */
   onListItemSelected(itemobj, listviewid) {
-    alert(`Selected item: ${itemobj.title}`);
+    this.nextView("myapp-readview", { item: itemobj });
+
     // TODO: implement how selection of itemobj shall be handled
   }
-
-  /*
-   * for views with listviews: react to the selection of a listitem menu option
-   * TODO: delete if no listview is used or if item selection is specified by targetview/targetaction
-   */
-  /* onListItemMenuItemSelected(menuitemview, itemobj, listview) {
-    // TODO: implement how selection of the option menuitemview for itemobj shall be handled
-    /* if (menuitemview.id === "myapp-deleteItemOption") {
-      this.deleteItem(itemobj);
-    } else if (menuitemview.id === "myapp-editItemOption") {
-      this.editItem(itemobj);
-    } 
-  } */
 
   /*
    * for views with dialogs
@@ -116,13 +91,13 @@ export default class ListViewController extends mwf.ViewController {
   //custom Methods
   editItem(item) {
     item.title += " " + item.title;
-    this.crudops.update(item._id, item).then(() => {
+    item.update().then(() => {
       this.updateInListview(item._id, item);
     });
   }
 
   deleteItem(item) {
-    this.crudops.delete(item._id).then(() => {
+    item.delete().then(() => {
       this.removeFromListview(item._id);
     });
   }

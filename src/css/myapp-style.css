@@ -4,3 +4,7 @@
   height: 40px;
   object-fit: cover;
 }
+
+#myapp-readview main img {
+  width: 100%;
+}

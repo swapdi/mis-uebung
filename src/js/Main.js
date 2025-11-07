@@ -11,6 +11,7 @@ import MyApplication from "./MyApplication.js";
 /* application libraries: view controllers */
 import ListViewController from "./controller/ListViewController.js";
 import MyInitialViewController from "./controller/MyInitialViewController.js";
+import ReadViewController from "./controller/ReadViewController.js";
 // TODO-REPEATED: import any further view controllers here
 
 // we export the framework modules required by the application and the application modules required by the framework
@@ -21,6 +22,7 @@ mwf.app.components = {
   MyApplication,
   MyInitialViewController,
   ListViewController,
+  ReadViewController,
   // TODO-REPEATED: export any further view controllers here
 };
 
