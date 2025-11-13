@@ -10,6 +10,7 @@ import MyApplication from "./MyApplication.js";
 /* application libraries: model */
 /* application libraries: view controllers */
 import ListViewController from "./controller/ListViewController.js";
+import MediaItemEditViewController from "./controller/MediaItemEditViewController.js";
 import MyInitialViewController from "./controller/MyInitialViewController.js";
 import ReadViewController from "./controller/ReadViewController.js";
 // TODO-REPEATED: import any further view controllers here
@@ -23,6 +24,7 @@ mwf.app.components = {
   MyInitialViewController,
   ListViewController,
   ReadViewController,
+  MediaItemEditViewController,
   // TODO-REPEATED: export any further view controllers here
 };
 

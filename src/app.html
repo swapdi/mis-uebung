@@ -39,7 +39,6 @@
           id="myapp-addNewItem"
           class="mwf-imgbutton mwf-img-plus mwf-right-align"
         ></button>
-        <button class="mwf-imgbutton mwf-img-delete mwf-right-align"></button>
       </header>
 
       <main class="mwf-scrollview">
@@ -121,6 +120,53 @@
           ></button>
         </footer>
       </div>
+    </div>
+    <div
+      class="mwf-dialog mwf-popup mwf-template mwf-databind mwf-view-component"
+      data-mwf-viewcontroller="MediaItemEditViewController"
+      data-mwf-templatename="myapp-mediaItemDialog"
+      id="myapp-mediaItemDialog"
+    >
+      <main>
+        <h2>
+          {{#if item.created}} Editieren:{{item.title}} {{else}} Neues Media
+          Item{{/if}}
+        </h2>
+        <form on-submit="submitForm">
+          <input
+            value="{{item.title}}"
+            class="mwf-autofocus"
+            name="title"
+            autocomplete="off"
+            required="required"
+            type="text"
+            placeholder="Titel"
+          />
+          <img src="{{item.src}}" alt="Bild des Media-Items" />
+          <input
+            on-change="imgsrcSelected"
+            type="file"
+            title="imgsrc"
+            accept="image/*"
+            id="myapp-mediaItemDialog-imgsrcfile"
+          />
+          <div class="mwf-buttonbar">
+            <button
+              on-click="deleteItem"
+              class="mwf-button mwf-left-align"
+              type="button"
+              disabled=" {{#unless item.created}}disabled{{/unless}}"
+            >
+              Löschen
+            </button>
+            <input
+              type="submit"
+              class="mwf-button mwf-right-align mwf-button-prio"
+              value="Speichern"
+            />
+          </div>
+        </form>
+      </main>
     </div>
   </body>
 </html>

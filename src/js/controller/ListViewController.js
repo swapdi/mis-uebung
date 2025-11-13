@@ -27,12 +27,46 @@ export default class ListViewController extends mwf.ViewController {
   async oncreate() {
     // TODO: do databinding, set listeners, initialise the view
 
+    this.addListener(
+      new mwf.EventMatcher("crud", "created", "MediaItem"),
+      (evt) => {
+        this.addToListview(evt.data);
+      }
+    );
+    this.addListener(
+      new mwf.EventMatcher("crud", "updated", "MediaItem"),
+      (evt) => {
+        this.updateInListview(evt.data._id, evt.data);
+      }
+    );
+    this.addListener(
+      new mwf.EventMatcher("crud", "deleted", "MediaItem"),
+      (evt) => {
+        this.removeFromListview(evt.data);
+      }
+    );
+
     this.root.querySelector("#myapp-addNewItem").onclick = () => {
       const newItem = this.createRandomObject();
-      newItem.create().then(() => this.addToListview(newItem));
+      newItem.title = "";
+      this.showDialog("myapp-mediaItemDialog", {
+        item: newItem,
+        actionBindings: {
+          submitForm: (evt) => {
+            evt.original.preventDefault();
+            newItem.create();
+            this.hideDialog();
+          },
+        },
+      });
     };
 
     entities.MediaItem.readAll().then((items) => {
+      items.forEach((item) => {
+        if (item.srcImg) {
+          item.src = URL.createObjectURL(item.srcImg);
+        }
+      });
       this.initialiseListview(items);
     });
 
@@ -90,15 +124,23 @@ export default class ListViewController extends mwf.ViewController {
 
   //custom Methods
   editItem(item) {
-    item.title += " " + item.title;
-    item.update().then(() => {
-      this.updateInListview(item._id, item);
+    this.showDialog("myapp-mediaItemDialog", {
+      item: item,
+      actionBindings: {
+        submitForm: (evt) => {
+          evt.original.preventDefault();
+          item.update();
+          this.hideDialog();
+        },
+        deleteItem: () => {
+          item.delete();
+          this.hideDialog();
+        },
+      },
     });
   }
 
   deleteItem(item) {
-    item.delete().then(() => {
-      this.removeFromListview(item._id);
-    });
+    item.delete();
   }
 }

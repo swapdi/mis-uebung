@@ -25,7 +25,7 @@ export default class ReadViewController extends mwf.ViewController {
 
     viewProxy.bindAction("deleteItem", () =>
       myItem.delete().then(() => {
-        this.previousView({ item: myItem }, "itemDeleted");
+        this.previousView();
       })
     );
 

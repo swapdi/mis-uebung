@@ -8,3 +8,8 @@
 #myapp-readview main img {
   width: 100%;
 }
+
+#myapp-mediaItemDialog main img {
+  padding: 10px;
+  max-height: 150px;
+}
